@@ -33,6 +33,22 @@
 #include "debug.h"
 #include "logging.h"
 
+#ifdef HAVE_UNWIND_H
+#include <unwind.h>
+
+extern int backtrace(void **buffer, int size);
+extern void backtrace_symbols_fd(void *const *array, int size, int fd);
+
+void print_stack_trace(int fd)
+{
+	void *buffer[100];
+	int nptrs = backtrace(buffer, 100);
+	backtrace_symbols_fd(buffer, nptrs, fd);
+}
+#else
+void print_stack_trace(int fd)	{}
+#endif
+
 #ifdef DEBUG
 /**
  * ntfs_debug_runlist_dump - Dump a runlist.

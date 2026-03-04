@@ -162,6 +162,33 @@ AC_PATH_PROG([SED], [sed])
 AC_ARG_VAR([LDCONFIG], [ldconfig utility])
 AC_PATH_PROG([LDCONFIG], [ldconfig], [true], [/sbin /usr/sbin $PATH])
 
+dnl ---------------------------------------------------------------
+dnl Checking if compiler supports -Waddress-of-packed-member option
+dnl FIXME: fix warnings '-Waddress-of-packed-member' without
+dnl       '-Wno-address-of-packed-member' option
+dnl ---------------------------------------------------------------
+
+AC_MSG_CHECKING([for compiler supporting -Waddress-of-packed-member safely])
+
+save_CFLAGS="$CFLAGS"
+CFLAGS="$CFLAGS -Wno-address-of-packed-member -Werror"
+
+AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM([], [])],
+    [supports_wno=yes],
+    [supports_wno=no]
+)
+
+CFLAGS="$save_CFLAGS"
+AC_MSG_RESULT([$supports_wno])
+
+AS_IF([test "x$supports_wno" = xyes],
+    [CFLAGS="$CFLAGS -Wno-address-of-packed-member"
+     AC_MSG_RESULT([yes])],
+    [AC_MSG_RESULT([no])])
+
+dnl ---------------------------------------------------------------
+
 # Environment
 AC_MSG_CHECKING([Windows OS])
 case "${target}" in

@@ -444,7 +444,7 @@ AC_SUBST([LIBDL])
 
 if test "$GCC" = "yes" ; then
 	# We add -Wall to enable some compiler warnings.
-	CFLAGS="${CFLAGS} -Wall"
+	CFLAGS="${CFLAGS} -Wall -Wno-address-of-packed-member"
 fi
 
 if test "${enable_pedantic}" = "yes"; then

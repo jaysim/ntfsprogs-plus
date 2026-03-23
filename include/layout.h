@@ -2522,16 +2522,29 @@ typedef enum {
  *
  * FIXME: It appears weird that the EA name is not Unicode. Is it true?
  * FIXME: It seems that name is always uppercased. Is it true?
+ *
+ * +---------------------------------------------------------------+--+
+ * |next_entry | flags | name_length | value_length | name | value |
+ * |_offset    |       |             |              |      |       |
+ * +---------------------------------------------------------------+--+
+ *                            |____________ | _____________^       ^
+ *                                          |______________________|
+ *
+ * next_entry_offset: Offset to the next EA_ATTR.
+ * flags			: Flags describing the EA.
+ * name_length		: Length of the name of the extended attribute in bytes.
+ * value_length		: Byte sizwe of the EA's value.
+ * name[0]			: Start of 'name' of the EA.
+ *
+ * The 'value' of the EA immediately follows the 'name'
+ * 'value' offset should be calculated with 'name + name_length + 1'
  */
 typedef struct {
-	le32 next_entry_offset;	/* Offset to the next EA_ATTR. */
-	EA_FLAGS flags;		/* Flags describing the EA. */
-	u8 name_length;		/* Length of the name of the extended
-				   attribute in bytes. */
-	le16 value_length;	/* Byte size of the EA's value. */
-	u8 name[0];		/* Name of the EA. */
-	u8 value[0];		/* The value of the EA. Immediately
-				   follows the name. */
+	le32 next_entry_offset;
+	EA_FLAGS flags;
+	u8 name_length;
+	le16 value_length;
+	u8 name[0];
 } __attribute__((__packed__)) EA_ATTR;
 
 /**

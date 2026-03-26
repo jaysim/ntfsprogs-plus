@@ -74,7 +74,7 @@ static const char lxmod[] = "$LXMOD";
 
 static int ntfs_need_ea(ntfs_inode *ni, ATTR_TYPES type, int size, int flags)
 {
-	u8 dummy;
+	u8 dummy = 0;
 	int res;
 
 	res = 0;
@@ -462,7 +462,7 @@ int ntfs_ea_check_wsldev(ntfs_inode *ni, dev_t *rdevp)
 		if (found) {
 			/* beware of alignment */
 			memcpy(&device, &p_ea->name[p_ea->name_length + 1],
-					sizeof(device));
+							sizeof(device));
 			*rdevp = makedev(le32_to_cpu(device.major),
 					le32_to_cpu(device.minor));
 			res = 0;

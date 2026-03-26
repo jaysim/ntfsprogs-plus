@@ -1882,8 +1882,10 @@ static int ntfs_ih_takeout(ntfs_index_context *icx, INDEX_HEADER *ih,
 		goto out;
 
 	if (le16_to_cpu(ie_dup->key_length) > 0) {
+		__attribute__((unused)) int dummy;
+
 		ntfs_index_ctx_reinit(icx);
-		ntfs_index_lookup(&ie_dup->key, le16_to_cpu(ie_dup->key_length), icx);
+		dummy = ntfs_index_lookup(&ie_dup->key, le16_to_cpu(ie_dup->key_length), icx);
 	}
 out:
 	free(ie_roam);
